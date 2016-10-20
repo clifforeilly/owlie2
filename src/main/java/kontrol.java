@@ -111,7 +111,7 @@ public class kontrol {
         System.out.println("... OutputFolder=" + OutputFolder);
 
         NowD = GetNow();
-        System.out.println("... Hash=" + NowD);
+        System.out.println("... Now=" + NowD);
 
         inputFileLoc = "D:\\LaRheto\\Inputs\\english-kjv-2.txt";
         System.out.println("... FileLoc=" + inputFileLoc);
