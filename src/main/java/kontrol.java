@@ -46,45 +46,40 @@ import uk.ac.manchester.cs.owlapi.modularity.SyntacticLocalityModuleExtractor;
 
 public class kontrol {
 
-
+    static String folderbase;
     static String OutputFolder;
     static String NowD;
     static String inputFileLoc;
+    static model model;
 
     public kontrol() {
 
-        try {
+        try
+        {
+            folderbase = "C:" + File.separator + "Users" + File.separator + "co17" + File.separator + "LocalStuff" + File.separator + "MyStuff" + File.separator + "Projects" + File.separator + "owlie2" + File.separator + "LaRheto" + File.separator;
+            //folderbase = "D:" + File.separator + "LaRheto" + File.separator;
 
-            String URLDocStruct = "http://repositori.com/sw/onto/DocStruct.owl";
+            OutputFolder = folderbase + "Outputs";
+            System.out.println("... OutputFolder=" + OutputFolder);
 
-            OWLOntologyManager owlmgr = OWLManager.createOWLOntologyManager();
-            IRI ontDocStruct = IRI.create(URLDocStruct);
-            OWLOntology ont = owlmgr.loadOntology(ontDocStruct);
+            NowD = GetNow();
+            System.out.println("... Now=" + NowD);
 
-            Set<OWLAxiom> ax = ont.getAxioms();
+            inputFileLoc = folderbase + "Inputs" + File.separator + "aru1.txt";
+            //english-kjv-2.txt
 
-            for (OWLAxiom a : ax) {
-                System.out.println(a.toString());
-            }
+            System.out.println("... FileLoc=" + inputFileLoc);
 
+            model = new model(folderbase);
+            Parse parse = new Parse(OutputFolder, NowD, model);
+            System.out.println("... running Parse");
+            parse.run(inputFileLoc);
 
-            OWLDataFactory fac = owlmgr.getOWLDataFactory();
-            String base = "http://repositori.com/sw/onto/DocStruct.owl#";
-            //prefix = ont.getOntologyID().getOntologyIRI() + "#";
-            DefaultPrefixManager pm = new DefaultPrefixManager(null, null, ontDocStruct.toString());
+            model.outputToFile();
 
-            OWLClass doc = fac.getOWLClass("#Doc", pm);
-
-            String u="D:\\LaRheto\\Outputs\\testo.owl";
-            File f = new File(u);
-
-            OWLNamedIndividual i = fac.getOWLNamedIndividual("#d", pm);
-            OWLAxiom ax1 = fac.getOWLClassAssertionAxiom(doc, i);
-            AddAxiom addax1 = new AddAxiom(ont, ax1);
-            owlmgr.applyChange(addax1);
-            owlmgr.saveOntology(ont, IRI.create(f.toURI()));
-
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println("Error: " + e.getStackTrace());
             System.out.println(e.toString());
 
@@ -100,30 +95,13 @@ public class kontrol {
     }
 
 
-    public static void main (String[] args) {
+    public static void main (String[] args)
+    {
+        System.out.println("starting Control");
 
         kontrol k = new kontrol();
 
-
-        System.out.println("starting Control");
-
-        OutputFolder = "D:\\LaRheto\\Outputs";
-        System.out.println("... OutputFolder=" + OutputFolder);
-
-        NowD = GetNow();
-        System.out.println("... Now=" + NowD);
-
-        inputFileLoc = "D:\\LaRheto\\Inputs\\english-kjv-2.txt";
-        System.out.println("... FileLoc=" + inputFileLoc);
-
-
-
-        Parse parse = new Parse(OutputFolder, NowD);
-        System.out.println("... running Parse");
-        parse.run(inputFileLoc);
-
-
-
+        System.out.println("ending Control");
     }
 
 }

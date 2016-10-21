@@ -17,17 +17,21 @@ public class Parse {
 
     String OutputFolder;
     String NowD;
+    model model;
 
-    public Parse(String POutputFolder, String PNowD)
+    public Parse(String POutputFolder, String PNowD, model mod)
     {
         OutputFolder = POutputFolder;
         NowD = PNowD;
+        model = mod;
     }
 
     public void run (String fileLoc)
     {
         try
         {
+            model.addIndividual("DocStruct", "doc", "doc");
+
             File f = new File(fileLoc);
             Properties props = new Properties();
             props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
@@ -60,7 +64,8 @@ public class Parse {
             for(CoreMap sentence : sentences)
             {
                 sc++;
-
+                String sn = "s" + sc;
+                model.addIndividual("Gate", "sentence", sn);
 
             }
 

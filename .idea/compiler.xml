@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
+    <option name="BUILD_PROCESS_HEAP_SIZE" value="1500" />
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />
@@ -28,5 +29,8 @@
     <bytecodeTargetLevel>
       <module name="owlie2" target="1.5" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xms1524m -Xmx1524m" />
   </component>
 </project>
