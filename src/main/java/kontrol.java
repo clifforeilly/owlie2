@@ -56,8 +56,8 @@ public class kontrol {
 
         try
         {
-            folderbase = "C:" + File.separator + "Users" + File.separator + "co17" + File.separator + "LocalStuff" + File.separator + "MyStuff" + File.separator + "Projects" + File.separator + "owlie2" + File.separator + "LaRheto" + File.separator;
-            //folderbase = "D:" + File.separator + "LaRheto" + File.separator;
+            //folderbase = "C:" + File.separator + "Users" + File.separator + "co17" + File.separator + "LocalStuff" + File.separator + "MyStuff" + File.separator + "Projects" + File.separator + "owlie2" + File.separator + "LaRheto" + File.separator;
+            folderbase = "D:" + File.separator + "LaRheto" + File.separator;
 
             OutputFolder = folderbase + "Outputs";
             System.out.println("... OutputFolder=" + OutputFolder);
@@ -65,12 +65,13 @@ public class kontrol {
             NowD = GetNow();
             System.out.println("... Now=" + NowD);
 
-            inputFileLoc = folderbase + "Inputs" + File.separator + "aru1.txt";
+            inputFileLoc = folderbase + "Inputs" + File.separator + "english-kjv-2.txt";
             //english-kjv-2.txt
+            //aru1
 
             System.out.println("... FileLoc=" + inputFileLoc);
 
-            model = new model(folderbase);
+            model = new model(folderbase, NowD);
             Parse parse = new Parse(OutputFolder, NowD, model);
             System.out.println("... running Parse");
             parse.run(inputFileLoc);

@@ -1,6 +1,7 @@
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 import java.io.File;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.Set;
  */
 public class model {
 
+    static String NowD;
     static String folderbase;
+    String baseIRI;
     OWLOntologyManager om;
     OWLOntology ont;
     OWLDataFactory df;
@@ -40,7 +43,7 @@ public class model {
         {
             r = Gate_word;
         }
-        else if(type.equals("sentence"))
+        else if(type.equals("Sentence"))
         {
             r = Gate_sentence;
         }
@@ -49,14 +52,17 @@ public class model {
     }
 
 
-    public model(String fb){
+    public model(String fb, String PNow){
 
         try {
 
+            NowD=PNow;
             folderbase = fb;
 
+            baseIRI = "http://repositori.com/sw/onto/" + NowD + ".owl";
+            IRI newIRI = IRI.create(baseIRI);
             om = OWLManager.createOWLOntologyManager();
-            ont = om.createOntology();
+            ont = om.createOntology(newIRI);
             df = om.getOWLDataFactory();
             pm = new DefaultPrefixManager(null, null, ont.toString());
 
@@ -76,8 +82,6 @@ public class model {
 
             setupClasses();
 
-            //prefix = ont.getOntologyID().getOntologyIRI() + "#";
-
             String DocStruct_base = "http://repositori.com/sw/onto/DocStruct.owl#";
             String Gate_base = "http://repositori.com/sw/onto/gate.owl#";
 
@@ -95,26 +99,88 @@ public class model {
         OWLAxiom ax1 = null;
         if(onto.equals("DocStruct"))
         {
-            OWLNamedIndividual i = fac_DocStruct.getOWLNamedIndividual("#" + value, pm_DocStruct);
-            ax1 = fac_DocStruct.getOWLClassAssertionAxiom(getClassType(owclass), i);
+            OWLNamedIndividual i1 = df.getOWLNamedIndividual(IRI.create("#" + value));
+            ax1 = df.getOWLClassAssertionAxiom(getClassType(owclass), i1);
         }
         else if(onto.equals("Gate"))
         {
-            OWLNamedIndividual i = fac_Gate.getOWLNamedIndividual("#" + value, pm_Gate);
-            ax1 = fac_Gate.getOWLClassAssertionAxiom(getClassType(owclass), i);
+            OWLNamedIndividual i1 = df.getOWLNamedIndividual(IRI.create("#" + value));
+            ax1 = df.getOWLClassAssertionAxiom(getClassType(owclass), i1);
         }
 
         AddAxiom addax1 = new AddAxiom(ont, ax1);
         om.applyChange(addax1);
-
     }
+
+    public void addObjectProperty(String onto, String owProp, String domain, String range)
+    {
+        OWLObjectPropertyAssertionAxiom ax1 = null;
+
+        if(onto.equals("DocStruct"))
+        {
+            OWLNamedIndividual id = df.getOWLNamedIndividual(IRI.create("#" + domain));
+            OWLNamedIndividual ir = df.getOWLNamedIndividual(IRI.create("#" + range));
+            OWLObjectProperty p = fac_DocStruct.getOWLObjectProperty("#" + owProp, pm_DocStruct);
+            ax1 = df.getOWLObjectPropertyAssertionAxiom(p, id, ir);
+        }
+        else if(onto.equals("Gate"))
+        {
+            OWLNamedIndividual id = df.getOWLNamedIndividual(IRI.create("#" + domain));
+            OWLNamedIndividual ir = df.getOWLNamedIndividual(IRI.create("#" + range));
+            OWLObjectProperty p = fac_Gate.getOWLObjectProperty("#" + owProp, pm_Gate);
+            ax1 = df.getOWLObjectPropertyAssertionAxiom(p, id, ir);
+        }
+
+        AddAxiom addax1 = new AddAxiom(ont, ax1);
+        om.applyChange(addax1);
+    }
+
+    public void addDatatypeProperty(String onto, String owProp, String domain, String value, String datatypetype)
+    {
+        OWLDataPropertyAssertionAxiom ax1 = null;
+
+        if(onto.equals("DocStruct"))
+        {
+            OWLDatatype odt = null;
+            OWLLiteral ol = null;
+
+            if(datatypetype.equals("int"))
+            {
+                odt = df.getOWLDatatype(OWL2Datatype.XSD_INT.getIRI());
+                ol = df.getOWLLiteral(value, odt);
+            }
+
+            OWLNamedIndividual id = df.getOWLNamedIndividual(IRI.create("#" + domain));
+            OWLDataProperty p = fac_DocStruct.getOWLDataProperty("#" + value, pm_DocStruct);
+            ax1 = df.getOWLDataPropertyAssertionAxiom(p, id, ol);
+        }
+        else if(onto.equals("Gate"))
+        {
+            OWLDatatype odt = null;
+            OWLLiteral ol = null;
+
+            if(datatypetype.equals("int"))
+            {
+                odt = df.getOWLDatatype(OWL2Datatype.XSD_INT.getIRI());
+                ol = df.getOWLLiteral(value, odt);
+            }
+
+            OWLNamedIndividual id = df.getOWLNamedIndividual(IRI.create("#" + domain));
+            OWLDataProperty p = fac_Gate.getOWLDataProperty(IRI.create("#" + value));
+            ax1 = df.getOWLDataPropertyAssertionAxiom(p, id, ol);
+        }
+
+        AddAxiom addax1 = new AddAxiom(ont, ax1);
+        om.applyChange(addax1);
+    }
+
 
     public void outputToFile()
     {
         try {
-            String u = folderbase + "Outputs" + File.separator + "testo.owl";
+            String u = folderbase + "Outputs" + File.separator + "testo_" + NowD + ".owl";
             File f = new File(u);
-            om.saveOntology(ont_DocStruct, IRI.create(f.toURI()));
+            om.saveOntology(ont, IRI.create(f.toURI()));
         }
         catch(Exception e)
         {
@@ -126,7 +192,8 @@ public class model {
     private void setupClasses()
     {
         DocStruct_doc = fac_DocStruct.getOWLClass("#Doc", pm_DocStruct);
-        Gate_word = fac_Gate.getOWLClass("#word", pm_DocStruct);
+        Gate_word = fac_Gate.getOWLClass("#word", pm_Gate);
+        Gate_sentence = fac_Gate.getOWLClass("#Sentence", pm_Gate);
     }
 
     public void printAxioms()

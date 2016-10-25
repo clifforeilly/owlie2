@@ -60,12 +60,45 @@ public class Parse {
             nlp.annotate(anno);
             List<CoreMap> sentences = anno.get(CoreAnnotations.SentencesAnnotation.class);
 
-            int sc=0;
+            int sc = 0;
+            int wc = 0;
+            int np = 1;
             for(CoreMap sentence : sentences)
             {
                 sc++;
                 String sn = "s" + sc;
-                model.addIndividual("Gate", "sentence", sn);
+                model.addIndividual("Gate", "Sentence", sn);
+
+                if(sc==1)
+                {
+                    model.addObjectProperty("DocStruct", "hasFirstSentence", "doc", sn);
+                }
+
+                if(sc==sentences.size())
+                {
+                    model.addObjectProperty("DocStruct", "hasLastSentence", "doc", sn);
+                }
+
+                String Sx = sentence.toString();
+                String[] words = Sx.split(" ");
+
+                model.addDatatypeProperty("Gate", "hasStartNode", sn, String.valueOf(np), "int");
+
+                for(String w : words)
+                {
+                    wc++;
+                    w = w.replace(":", "");
+                    w = w.replace(";", "");
+                    w = w.replace(",", "");
+                    w = w.replace(".", "");
+                    w = w.replace("?", "");
+                    String wn = "w" + wc;
+                    model.addIndividual("Gate", "word", wn);
+
+
+
+                    np = np + w.length();
+                }
 
             }
 
