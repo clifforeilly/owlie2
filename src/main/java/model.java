@@ -88,9 +88,8 @@ public class model {
         }
         catch (Exception e)
         {
-            System.out.println("Error: " + e.getStackTrace());
-            System.out.println(e.toString());
-
+        System.out.println("Error: " + e.toString() + " - " + e.getMessage());
+        System.out.println(e.toString());
         }
     }
 
@@ -146,7 +145,7 @@ public class model {
 
             if(datatypetype.equals("int"))
             {
-                odt = df.getOWLDatatype(OWL2Datatype.XSD_INT.getIRI());
+                odt = df.getOWLDatatype(OWL2Datatype.XSD_INTEGER.getIRI());
                 ol = df.getOWLLiteral(value, odt);
             }
 
@@ -161,7 +160,7 @@ public class model {
 
             if(datatypetype.equals("int"))
             {
-                odt = df.getOWLDatatype(OWL2Datatype.XSD_INT.getIRI());
+                odt = df.getOWLDatatype(OWL2Datatype.XSD_INTEGER.getIRI());
                 ol = df.getOWLLiteral(value, odt);
             }
 
@@ -182,9 +181,9 @@ public class model {
             File f = new File(u);
             om.saveOntology(ont, IRI.create(f.toURI()));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            System.out.println("Error: " + e.getStackTrace());
+            System.out.println("Error: " + e.toString() + " - " + e.getMessage());
             System.out.println(e.toString());
         }
     }

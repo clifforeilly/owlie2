@@ -81,9 +81,8 @@ public class kontrol {
         }
         catch (Exception e)
         {
-            System.out.println("Error: " + e.getStackTrace());
+            System.out.println("Error: " + e.toString() + " - " + e.getMessage());
             System.out.println(e.toString());
-
         }
 
     }

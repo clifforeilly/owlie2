@@ -96,16 +96,16 @@ public class Parse {
                     model.addIndividual("Gate", "word", wn);
 
 
-
                     np = np + w.length();
                 }
 
             }
 
         }
-        catch (Exception ee)
+        catch (Exception e)
         {
-            ee.printStackTrace();
+            System.out.println("Error: " + e.toString() + " - " + e.getMessage());
+            System.out.println(e.toString());
         }
 
     }
