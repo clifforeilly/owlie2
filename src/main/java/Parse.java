@@ -6,8 +6,8 @@ import edu.stanford.nlp.util.CoreMap;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.List;
-import java.util.Properties;
+import java.io.PrintStream;
+import java.util.*;
 
 /**
  * Created by cliff on 05/10/2016.
@@ -59,9 +59,9 @@ public class Parse {
             Annotation anno = new Annotation(everything);
             nlp.annotate(anno);
             List<CoreMap> sentences = anno.get(CoreAnnotations.SentencesAnnotation.class);
-            List<CoreMap> paragraphs = anno.get(CoreAnnotations.ParagraphsAnnotation.class);
+            //List<CoreMap> paragraphs = anno.get(CoreAnnotations.ParagraphsAnnotation.class);
 
-            int parac = 0;
+            /*int parac = 0;
             for(CoreMap paragraph : paragraphs)
             {
                 parac++;
@@ -71,11 +71,27 @@ public class Parse {
 
                 String ss = paragraph.toString();
                 String[] sss = ss.split(".");
+                List<String> ses = new ArrayList<String>();
+                for(String sss2 : sss)
+                {
+                    String[] ssss = sss2.split("\\?");
+                    for(String ssss2 : ssss)
+                    {
+                        String[] sssss = ssss2.split("!");
+                        for(String sssss2 : sssss)
+                        {
+                            ses.add(sssss2);
+                        }
+                    }
+                }
 
-
-
+                doSentence(ses);
 
             }
+*/
+
+            model.addIndividual("Gate", "paragraph", "p1");
+            model.addObjectProperty("DocStruct", "hasParagraph", "doc", "p1");
 
             int id = 0;
             int sc = 0;
@@ -91,10 +107,11 @@ public class Parse {
 
                 model.addDatatypeProperty("Gate", "hasID", sn, String.valueOf(id), "int");
                 model.addIndividual("Gate", "Sentence", sn);
+                model.addObjectProperty("DocStruct", "hasSentence", "p1", sn);
 
                 if(sc==1)
                 {
-                    model.addObjectProperty("DocStruct", "hasFirstSentence", "doc", sn);
+                    model.addObjectProperty("DocStruct", "hasFirstSentence", "p1", sn);
                 }
                 else
                 {
@@ -104,7 +121,7 @@ public class Parse {
 
                 if(sc==sentences.size())
                 {
-                    model.addObjectProperty("DocStruct", "hasLastSentence", "doc", sn);
+                    model.addObjectProperty("DocStruct", "hasLastSentence", "p1", sn);
                 }
                 else
                 {
@@ -128,6 +145,8 @@ public class Parse {
                     w = w.replace(".", "");
                     w = w.replace("?", "");
                     String wn = "w" + wc;
+                    String wp = "w" + Integer.toString(wc-1);
+                    String we = "w" + Integer.toString(wc+1);
                     model.addIndividual("Gate", "word", wn);
                     model.addObjectProperty("DocStruct", "hasWord", sn, wn);
                     model.addDatatypeProperty("Gate", "hasString", wn, String.valueOf(w), "str");
@@ -144,14 +163,22 @@ public class Parse {
                     {
                         model.addObjectProperty("DocStruct", "hasFirstWord", sn, wn);
                     }
+                    else
+                    {
+                        model.addObjectProperty("DocStruct", "hasPreviousWord", wn, wp);
+                    }
+
                     if(wc1==words.length)
                     {
                         model.addDatatypeProperty("Gate", "hasEndNode", sn, String.valueOf(np-1), "int");
                         model.addObjectProperty("DocStruct", "hasLastWord", sn, wn);
                     }
+                    else
+                    {
+                        model.addObjectProperty("DocStruct", "hasNextWord", wn, we);
+                    }
 
                     model.addDatatypeProperty("DocStruct", "hasFirstCharacter", wn, w.substring(0, 1), "str");
-                    //model.addDatatypeProperty("DocStruct", "hasLastCharacter", wn, w.substring(w.length()), "str");
 
                 }
 
@@ -161,10 +188,9 @@ public class Parse {
         catch (Exception e)
         {
             System.out.println("Error: " + e.toString() + " - " + e.getMessage());
-            System.out.println(e.toString());
+            e.printStackTrace(System.out);
         }
 
     }
-
 
 }

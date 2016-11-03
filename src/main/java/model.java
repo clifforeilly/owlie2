@@ -30,6 +30,7 @@ public class model {
     OWLClass DocStruct_doc;
     OWLClass Gate_word;
     OWLClass Gate_sentence;
+    OWLClass Gate_paragraph;
 
     public OWLClass getClassType(String type)
     {
@@ -46,6 +47,10 @@ public class model {
         else if(type.equals("Sentence"))
         {
             r = Gate_sentence;
+        }
+        else if(type.equals("paragraph"))
+        {
+            r = Gate_paragraph;
         }
 
         return r;
@@ -203,6 +208,7 @@ public class model {
         DocStruct_doc = fac_DocStruct.getOWLClass("#Doc", pm_DocStruct);
         Gate_word = fac_Gate.getOWLClass("#word", pm_Gate);
         Gate_sentence = fac_Gate.getOWLClass("#Sentence", pm_Gate);
+        Gate_paragraph = fac_Gate.getOWLClass("#paragraph", pm_Gate);
     }
 
     public void printAxioms()
