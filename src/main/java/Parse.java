@@ -59,24 +59,56 @@ public class Parse {
             Annotation anno = new Annotation(everything);
             nlp.annotate(anno);
             List<CoreMap> sentences = anno.get(CoreAnnotations.SentencesAnnotation.class);
+            List<CoreMap> paragraphs = anno.get(CoreAnnotations.ParagraphsAnnotation.class);
 
+            int parac = 0;
+            for(CoreMap paragraph : paragraphs)
+            {
+                parac++;
+                String paracn = "p" + parac;
+                model.addIndividual("Gate", "paragraph", paracn);
+                model.addObjectProperty("DocStruct", "hasParagraph", "doc", paracn);
+
+                String ss = paragraph.toString();
+                String[] sss = ss.split(".");
+
+
+
+
+            }
+
+            int id = 0;
             int sc = 0;
             int wc = 0;
             int np = 1;
             for(CoreMap sentence : sentences)
             {
+                id++;
                 sc++;
                 String sn = "s" + sc;
+                String sp = "s" + Integer.toString(sc-1);
+                String se = "s" + Integer.toString(sc+1);
+
+                model.addDatatypeProperty("Gate", "hasID", sn, String.valueOf(id), "int");
                 model.addIndividual("Gate", "Sentence", sn);
 
                 if(sc==1)
                 {
                     model.addObjectProperty("DocStruct", "hasFirstSentence", "doc", sn);
                 }
+                else
+                {
+                    model.addObjectProperty("DocStruct", "hasPreviousSentence", sn, sp);
+                }
+
 
                 if(sc==sentences.size())
                 {
                     model.addObjectProperty("DocStruct", "hasLastSentence", "doc", sn);
+                }
+                else
+                {
+                    model.addObjectProperty("DocStruct", "hasNextSentence", sn, se);
                 }
 
                 String Sx = sentence.toString();
@@ -84,9 +116,12 @@ public class Parse {
 
                 model.addDatatypeProperty("Gate", "hasStartNode", sn, String.valueOf(np), "int");
 
+                int wc1 = 0;
                 for(String w : words)
                 {
+
                     wc++;
+                    wc1++;
                     w = w.replace(":", "");
                     w = w.replace(";", "");
                     w = w.replace(",", "");
@@ -94,9 +129,30 @@ public class Parse {
                     w = w.replace("?", "");
                     String wn = "w" + wc;
                     model.addIndividual("Gate", "word", wn);
+                    model.addObjectProperty("DocStruct", "hasWord", sn, wn);
+                    model.addDatatypeProperty("Gate", "hasString", wn, String.valueOf(w), "str");
 
+                    id++;
+                    model.addDatatypeProperty("Gate", "hasID", wn, String.valueOf(id), "int");
 
+                    model.addDatatypeProperty("Gate", "hasStartNode", wn, String.valueOf(np), "int");
                     np = np + w.length();
+                    model.addDatatypeProperty("Gate", "hasEndNode", wn, String.valueOf(np), "int");
+
+
+                    if(wc1==1)
+                    {
+                        model.addObjectProperty("DocStruct", "hasFirstWord", sn, wn);
+                    }
+                    if(wc1==words.length)
+                    {
+                        model.addDatatypeProperty("Gate", "hasEndNode", sn, String.valueOf(np-1), "int");
+                        model.addObjectProperty("DocStruct", "hasLastWord", sn, wn);
+                    }
+
+                    model.addDatatypeProperty("DocStruct", "hasFirstCharacter", wn, w.substring(0, 1), "str");
+                    //model.addDatatypeProperty("DocStruct", "hasLastCharacter", wn, w.substring(w.length()), "str");
+
                 }
 
             }

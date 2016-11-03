@@ -148,9 +148,14 @@ public class model {
                 odt = df.getOWLDatatype(OWL2Datatype.XSD_INTEGER.getIRI());
                 ol = df.getOWLLiteral(value, odt);
             }
+            if(datatypetype.equals("str"))
+            {
+                odt = df.getOWLDatatype(OWL2Datatype.XSD_STRING.getIRI());
+                ol = df.getOWLLiteral(value, odt);
+            }
 
             OWLNamedIndividual id = df.getOWLNamedIndividual(IRI.create("#" + domain));
-            OWLDataProperty p = fac_DocStruct.getOWLDataProperty("#" + value, pm_DocStruct);
+            OWLDataProperty p = fac_DocStruct.getOWLDataProperty(IRI.create("#" + owProp));
             ax1 = df.getOWLDataPropertyAssertionAxiom(p, id, ol);
         }
         else if(onto.equals("Gate"))
@@ -163,9 +168,14 @@ public class model {
                 odt = df.getOWLDatatype(OWL2Datatype.XSD_INTEGER.getIRI());
                 ol = df.getOWLLiteral(value, odt);
             }
+            if(datatypetype.equals("str"))
+            {
+                odt = df.getOWLDatatype(OWL2Datatype.XSD_STRING.getIRI());
+                ol = df.getOWLLiteral(value, odt);
+            }
 
             OWLNamedIndividual id = df.getOWLNamedIndividual(IRI.create("#" + domain));
-            OWLDataProperty p = fac_Gate.getOWLDataProperty(IRI.create("#" + value));
+            OWLDataProperty p = fac_Gate.getOWLDataProperty(IRI.create("#" + owProp));
             ax1 = df.getOWLDataPropertyAssertionAxiom(p, id, ol);
         }
 
