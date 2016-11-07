@@ -1,11 +1,18 @@
+//import org.mindswap.pellet.jena.PelletReasoner;
+//import org.mindswap.pellet.jena.PelletReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
+import org.semanticweb.owlapi.reasoner.Node;
+import org.semanticweb.owlapi.reasoner.NodeSet;
 
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+
+import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
+import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
 /**
  * Created by co17 on 20/10/2016.
@@ -23,6 +30,10 @@ public class model {
     OWLOntology ont_DocStruct;
     OWLDataFactory fac_DocStruct;
     DefaultPrefixManager pm_DocStruct;
+    OWLOntologyManager om_LassRhet;
+    OWLOntology ont_LassRhet;
+    OWLDataFactory fac_LassRhet;
+    DefaultPrefixManager pm_LassRhet;
     OWLOntologyManager om_Gate;
     OWLOntology ont_Gate;
     OWLDataFactory fac_Gate;
@@ -85,10 +96,18 @@ public class model {
             fac_Gate = om_Gate.getOWLDataFactory();
             pm_Gate = new DefaultPrefixManager(null, null, ontGate.toString());
 
+            String URLLassRhet = "http://repositori.com/sw/onto/LassoingRhetoric.owl";
+            om_LassRhet = OWLManager.createOWLOntologyManager();
+            IRI ontLassRhet = IRI.create(URLLassRhet);
+            ont_LassRhet = om_LassRhet.loadOntology(ontLassRhet);
+            fac_LassRhet = om_LassRhet.getOWLDataFactory();
+            pm_LassRhet = new DefaultPrefixManager(null, null, ontLassRhet.toString());
+
             setupClasses();
 
             String DocStruct_base = "http://repositori.com/sw/onto/DocStruct.owl#";
             String Gate_base = "http://repositori.com/sw/onto/gate.owl#";
+            String LassRhet_base = "http://repositori.com/sw/onto/LassoingRhetoric.owl#";
 
         }
         catch (Exception e)
@@ -188,6 +207,21 @@ public class model {
         om.applyChange(addax1);
     }
 
+
+    public void reasonPellet()
+    {
+        PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ont);
+        reasoner.getKB().realize();
+        reasoner.getKB().printClassTree();
+    }
+
+
+    public void runSWRL()
+    {
+        //SWRLClassAtom at1 = fac_LassRhet.getSWRLClassAtom(IRI.create("#" + ))
+        //SWRLRule r1 = fac_LassRhet.getSWRLRule(IRI.create("#lassoAnaphora1"));
+
+    }
 
     public void outputToFile()
     {

@@ -76,6 +76,7 @@ public class kontrol {
             System.out.println("... running Parse");
             parse.run(inputFileLoc);
 
+            model.reasonPellet();
             model.outputToFile();
 
         }

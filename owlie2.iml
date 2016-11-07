@@ -82,5 +82,18 @@
     <orderEntry type="library" name="Maven: com.googlecode.efficient-java-matrix-library:ejml:0.23" level="project" />
     <orderEntry type="library" name="Maven: javax.json:javax.json-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: edu.stanford.nlp:stanford-corenlp:models-english:3.6.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../pellet-2.4.0-ignazio1977-dist/pellet-2.4.0-ignazio1977/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../pellet-2.4.0-ignazio1977-dist/pellet-2.4.0-ignazio1977/lib" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/../../pellet-2.4.0-ignazio1977-dist/pellet-2.4.0-ignazio1977/lib" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/../../pellet-2.4.0-ignazio1977-dist/pellet-2.4.0-ignazio1977/lib" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

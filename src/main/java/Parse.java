@@ -180,6 +180,11 @@ public class Parse {
 
                     model.addDatatypeProperty("DocStruct", "hasFirstCharacter", wn, w.substring(0, 1), "str");
 
+
+                    // sameAsWord
+
+
+
                 }
 
             }
