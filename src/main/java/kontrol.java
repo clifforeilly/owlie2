@@ -65,7 +65,7 @@ public class kontrol {
             NowD = GetNow();
             System.out.println("... Now=" + NowD);
 
-            inputFileLoc = folderbase + "Inputs" + File.separator + "english-kjv-2.txt";
+            inputFileLoc = folderbase + "Inputs" + File.separator + "anaphora_1.txt";
             //english-kjv-2.txt
             //aru1
 
@@ -76,6 +76,8 @@ public class kontrol {
             System.out.println("... running Parse");
             parse.run(inputFileLoc);
 
+            //model.runSWRL();
+            model.runSWRLAnaphora();
             model.reasonPellet();
             model.outputToFile();
 
